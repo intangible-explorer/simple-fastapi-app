@@ -44,8 +44,8 @@ pipeline {
 
 def setupBackend() {
     def appPath = 'app/'
-    sh "sudo apt update && sudo apt upgrade -y"
-    sh "sudo apt install -y python3-venv"
+    sh "apt update && apt upgrade -y"
+    sh "apt install -y python3-venv"
     sh "cd ${appPath} && python3 -m venv venv && source venv/bin/activate"
     sh "pip install -r /simple-fastapi-app/requirements.txt"
 }
