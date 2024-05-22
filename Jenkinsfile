@@ -16,7 +16,10 @@ pipeline {
         }
         stage("Deploy") {
             steps {
-                echo "deploy"
+                sh '''
+                git pull 
+                fastapi dev main.py
+                '''
             }
         }
     }
