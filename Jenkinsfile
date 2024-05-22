@@ -18,7 +18,8 @@ pipeline {
             steps {
                 withCredentials([file(credentialsId: 'test-ssh', variable: 'fastpi-app-server-file')]) {
                     sh '''
-                    ssh -i ${fastpi-app-server-file} ubuntu@13.232.233.78
+                    cat $fastpi-app-server-file
+                    ssh -i $fastpi-app-server-file ubuntu@13.232.233.78
                     cd simple-fastapi-app
                     git pull origin main 
                     source env/bin/activate
