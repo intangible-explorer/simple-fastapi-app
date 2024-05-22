@@ -16,16 +16,21 @@ pipeline {
         }
         stage("Deploy DEV Environment") {
             steps {
-                withCredentials([file(credentialsId: 'test-ssh', variable: 'fastpi')]) {
+                sshagent(credentials: ['app-server-ssh-private-key']) {
                     sh '''
-                    cat $fastpi
-                    ssh -i $fastpi ubuntu@13.232.233.78
-                    cd simple-fastapi-app
-                    git pull origin main 
-                    source env/bin/activate
-                    fastapi dev main.py --host 0.0.0.0
+                        ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -i <(echo "$SSH_PRIVATE_KEY") ubuntu@13.232.233.78 "echo $SSH_PRIVATE_KEY"
                     '''
                 }
+                // withCredentials([file(credentialsId: 'test-ssh', variable: 'fastpi')]) {
+                //     sh '''
+                //     cat $fastpi
+                //     ssh -i $fastpi ubuntu@13.232.233.78
+                //     cd simple-fastapi-app
+                //     git pull origin main 
+                //     source env/bin/activate
+                //     fastapi dev main.py --host 0.0.0.0
+                //     '''
+                // }
     // some block
             }
         }
