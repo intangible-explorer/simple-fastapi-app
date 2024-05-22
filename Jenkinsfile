@@ -18,7 +18,7 @@ pipeline {
             steps {
                 sh '''
                 git pull origin main
-                venv/bin/fastapi dev main.py
+                venv/bin/fastapi dev main.py --host 0.0.0.0
                 '''
             }
         }
