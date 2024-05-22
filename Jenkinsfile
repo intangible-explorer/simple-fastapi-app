@@ -14,10 +14,10 @@ pipeline {
                 sh 'venv/bin/pip install -r requirements.txt'
             }
         }
-        stage("Deploy") {
+        stage("Deploy DEV Environment") {
             steps {
                 sh '''
-                git pull 
+                git pull origin main
                 fastapi dev main.py
                 '''
             }
