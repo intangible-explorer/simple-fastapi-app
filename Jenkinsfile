@@ -18,7 +18,7 @@ pipeline {
             steps {
                 withCredentials([sshUserPrivateKey(credentialsId: 'app-server-ssh-private-key', keyFileVariable: 'SSH_PRIVATE_KEY', usernameVariable: 'ubuntu')]) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -i (echo "$SSH_PRIVATE_KEY") ubuntu@13.232.233.78 echo $SSH_PRIVATE_KEY
+                    ssh -o StrictHostKeyChecking=no -i ${$SSH_PRIVATE_KEY} ubuntu@13.232.233.78 echo $SSH_PRIVATE_KEY
                     // ssh -i $fastpi ubuntu@13.232.233.78
                     // cd simple-fastapi-app
                     // git pull origin main 
