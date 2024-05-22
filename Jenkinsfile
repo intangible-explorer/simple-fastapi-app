@@ -16,7 +16,7 @@ pipeline {
         }
         stage("Deploy DEV Environment") {
             steps {
-                withCredentials([string(credentialsId: 'test-ssh', variable: 'fastpi-app-server-file')]) {
+                withCredentials([file(credentialsId: 'test-ssh', variable: 'fastpi-app-server-file')]) {
                     sh '''
                     ssh -i ${fastpi-app-server-file} ubuntu@13.232.233.78
                     cd simple-fastapi-app
