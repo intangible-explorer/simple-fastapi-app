@@ -16,13 +16,16 @@ pipeline {
         }
         stage("Deploy DEV Environment") {
             steps {
-                sh '''
-                ssh ubuntu@13.232.233.78
-                cd simple-fastapi-app
-                git pull origin main 
-                source env/bin/activate
-                fastapi dev main.py --host 0.0.0.0
-                '''
+                withCredentials([sshUserPrivateKey(credentialsId: 'app-server-ssh-key', keyFileVariable: 'fastpi-app-server-file')]) {
+                    sh '''
+                    ssh -i ${fastpi-app-server-file} ubuntu@13.232.233.78
+                    cd simple-fastapi-app
+                    git pull origin main 
+                    source env/bin/activate
+                    fastapi dev main.py --host 0.0.0.0
+                    '''
+                }
+    // some block
             }
         }
     }
