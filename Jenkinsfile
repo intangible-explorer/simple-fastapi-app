@@ -17,8 +17,11 @@ pipeline {
         stage("Deploy DEV Environment") {
             steps {
                 sh '''
-                git pull origin main
-                venv/bin/fastapi dev main.py --host 0.0.0.0
+                ssh ubuntu@13.232.233.78
+                cd simple-fastapi-app
+                git pull origin main 
+                source env/bin/activate
+                fastapi dev main.py --host 0.0.0.0
                 '''
             }
         }
