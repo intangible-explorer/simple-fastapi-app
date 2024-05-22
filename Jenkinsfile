@@ -5,7 +5,7 @@ pipeline {
         stage("Build") {
             steps {
                 sh '''
-                    apt-get update
+                    sudo apt-get update
                     apt install -y python3-venv
                     cd app/ && python3 -m venv venv && source venv/bin/activate
                     pip install -r /simple-fastapi-app/requirements.txt
