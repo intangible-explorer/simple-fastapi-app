@@ -5,10 +5,12 @@ pipeline {
         stage("Build") {
             steps {
                 sh '''
-                    sudo apt-get update
+                    apt-get update
                     apt install -y python3-venv
-                    cd app/ && python3 -m venv venv && source venv/bin/activate
-                    pip install -r /simple-fastapi-app/requirements.txt
+                    cd app/simple-fastapi-app
+                    python3 -m venv venv
+                    source venv/bin/activate
+                    pip install -r requirements.txt
                 '''
             }
         }
@@ -16,51 +18,20 @@ pipeline {
         stage("Unit Testing") {
             steps {
                 echo "Running Unit Tests"
+                // Add your unit testing commands here
             }
         }
 
         stage('Deploy to Dev Environment') {
             steps {
                 sh '''
-                    sh "cd app/simple-fastapi-app/"
-                    sh "uvicorn --host 0.0.0.0 main:app --port 8001"
+                    cd app/simple-fastapi-app
+                    source venv/bin/activate && uvicorn --host 0.0.0.0 main:app --port 8001 &
                     '''
                 echo "Access your Dev environment application at: http://localhost:8001"
-                
             }
         }
 
-        // stage('Deploy to Test Environment') {
-        //     steps {
-        //         script {
-        //             deployToLocal('test', 8002)
-        //         }
-        //     }
-        // }
-
-        // stage('Deploy to Prod Environment') {
-        //     steps {
-        //         script {
-        //             deployToLocal('prod', 8003)
-        //         }
-        //     }
-        // }
+        // Add stages for other environments if needed
     }
 }
-
-// def setupBackend() {
-//     def appPath = 'app/'
-//     sh "apt install -y python3-venv"
-//     sh "cd ${appPath} && python3 -m venv venv && source venv/bin/activate"
-//     sh "pip install -r /simple-fastapi-app/requirements.txt"
-// }
-
-// def deployToLocal(environment, port) {
-//     def appPath = 'app/'
-//     def appPort = port
-    
-//     sh "cd ${appPath}/simple-fastapi-app/"
-//     sh "uvicorn --host 0.0.0.0 main:app --port ${appPort}"
-    
-//     echo "Access your ${environment} environment application at: http://localhost:${appPort}"
-// }
