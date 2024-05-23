@@ -4,7 +4,7 @@ app = FastAPI()
 
 @app.get("/")
 def root():
-    return {"message": "From FastAPI! Jenkins CI-CD working"}
+    return {"message": "From FastAPI! Jenkins CI-CD working, not that smoothly"}
 
 @app.get("/hello/{user}")
 def say_hello(user: str):
