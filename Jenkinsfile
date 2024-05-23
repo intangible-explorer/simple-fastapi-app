@@ -10,6 +10,9 @@ pipeline {
         stage('Set Environment') {
             steps {
                 script {
+                    echo "Branch Name: ${env.BRANCH_NAME}"  // Debugging line
+
+                    // Assuming BRANCH_NAME is a Jenkins environment variable
                     if (env.BRANCH_NAME == 'int') {
                         env.DEV_SERVER = 'ubuntu@43.205.206.174'
                         env.GIT_BRANCH = 'int'
@@ -20,18 +23,21 @@ pipeline {
                         env.DEV_SERVER = 'ubuntu@3.110.159.100'
                         env.GIT_BRANCH = 'main'
                     } else {
-                        error('Unsupported branch: ${env.BRANCH_NAME}')
+                        error("Unsupported branch: ${env.BRANCH_NAME}")
                     }
+
+                    echo "DEV_SERVER: ${env.DEV_SERVER}"  // Debugging line
+                    echo "GIT_BRANCH: ${env.GIT_BRANCH}"  // Debugging line
                 }
             }
         }
-        
+
         stage('Checkout') {
             steps {
-                echo 'checkout'
+                echo 'Checkout'
             }
         }
-        
+
         stage('Test') {
             steps {
                 sh 'python3 -m venv venv'
@@ -40,7 +46,7 @@ pipeline {
                 echo 'Testing Completed'
             }
         }
-        
+
         stage('Deploy') {
             steps {
                 script {
@@ -48,16 +54,16 @@ pipeline {
                         ssh -tt -o StrictHostKeyChecking=no ${env.DEV_SERVER} << EOF
                             # Kill any process running on port 8000
                             fuser -k 8000/tcp
-                            
+
                             # Navigate to the app directory
                             cd simple-fastapi-app
-                            
+
                             # Pull the latest code from the respective branch
                             git pull origin ${env.GIT_BRANCH}
-                            
+
                             # Activate the virtual environment
                             source venv/bin/activate
-                            
+
                             # Start the FastAPI server in the background
                             nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
                             exit
