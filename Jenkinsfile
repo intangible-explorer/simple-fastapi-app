@@ -43,6 +43,10 @@ pipeline {
         
         stage("Deploy") {
             steps {
+                sh '''
+                echo "$env.DEV_SERVER"
+                echo "$env.GIT_BRANCH"
+                '''
                 sshagent(['ssh-app-server']) {
                     sh """
                         ssh -tt -o StrictHostKeyChecking=no ${env.DEV_SERVER} << EOF
