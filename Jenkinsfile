@@ -33,6 +33,9 @@ pipeline {
 
                     env.DEV_SERVER = devServer
                     env.GIT_BRANCH = gitBranch
+
+                    echo "env.DEV_SERVER: ${env.DEV_SERVER}"  // Debugging line
+                    echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"  // Debugging line
                 }
             }
         }
