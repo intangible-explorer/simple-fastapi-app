@@ -60,7 +60,9 @@ pipeline {
                             exit
                         EOF
                     """
-                    sh deployScript
+                    sshagent(['ssh-app-server']) {
+                        sh deployScript
+                    }
                 }
             }
         }
