@@ -12,22 +12,27 @@ pipeline {
                 script {
                     echo "Branch Name: ${env.BRANCH_NAME}"  // Debugging line
 
-                    // Assuming BRANCH_NAME is a Jenkins environment variable
+                    def devServer = ''
+                    def gitBranch = ''
+
                     if (env.BRANCH_NAME == 'int') {
-                        env.DEV_SERVER = 'ubuntu@43.205.206.174'
-                        env.GIT_BRANCH = 'int'
+                        devServer = 'ubuntu@43.205.206.174'
+                        gitBranch = 'int'
                     } else if (env.BRANCH_NAME == 'uat') {
-                        env.DEV_SERVER = 'ubuntu@65.0.86.51'
-                        env.GIT_BRANCH = 'uat'
+                        devServer = 'ubuntu@65.0.86.51'
+                        gitBranch = 'uat'
                     } else if (env.BRANCH_NAME == 'main') {
-                        env.DEV_SERVER = 'ubuntu@3.110.159.100'
-                        env.GIT_BRANCH = 'main'
+                        devServer = 'ubuntu@3.110.159.100'
+                        gitBranch = 'main'
                     } else {
                         error("Unsupported branch: ${env.BRANCH_NAME}")
                     }
 
-                    echo "DEV_SERVER: ${env.DEV_SERVER}"  // Debugging line
-                    echo "GIT_BRANCH: ${env.GIT_BRANCH}"  // Debugging line
+                    echo "DEV_SERVER: ${devServer}"  // Debugging line
+                    echo "GIT_BRANCH: ${gitBranch}"  // Debugging line
+
+                    env.DEV_SERVER = devServer
+                    env.GIT_BRANCH = gitBranch
                 }
             }
         }
