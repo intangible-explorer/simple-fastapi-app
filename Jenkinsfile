@@ -1,41 +1,23 @@
 pipeline {
     agent any
 
-    environment {
-        DEV_SERVER = 'ab'
-        GIT_BRANCH = 'cd'
-    }
-
     stages {
         stage('Set Environment') {
             steps {
                 script {
                     echo "Branch Name: ${env.BRANCH_NAME}"  // Debugging line
 
-                    devServer = ''
-                    gitBranch = ''
-
                     if (env.BRANCH_NAME == 'int') {
-                        devServer = 'ubuntu@43.205.206.174'
-                        gitBranch = 'int'
+                        env.DEV_SERVER = 'ubuntu@43.205.206.174'
                     } else if (env.BRANCH_NAME == 'uat') {
-                        devServer = 'ubuntu@65.0.86.51'
-                        gitBranch = 'uat'
+                        env.DEV_SERVER = 'ubuntu@65.0.86.51'
                     } else if (env.BRANCH_NAME == 'main') {
-                        devServer = 'ubuntu@3.110.159.100'
-                        gitBranch = 'main'
+                        env.DEV_SERVER = 'ubuntu@3.110.159.100'
                     } else {
                         error("Unsupported branch: ${env.BRANCH_NAME}")
                     }
 
-                    echo "DEV_SERVER: ${devServer}"  // Debugging line
-                    echo "GIT_BRANCH: ${gitBranch}"  // Debugging line
-
-                    DEV_SERVER = devServer
-                    GIT_BRANCH = gitBranch
-
                     echo "env.DEV_SERVER: ${env.DEV_SERVER}"  // Debugging line
-                    echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"  // Debugging line
                 }
             }
         }
@@ -68,7 +50,7 @@ pipeline {
                             cd simple-fastapi-app
 
                             # Pull the latest code from the respective branch
-                            git pull origin ${env.GIT_BRANCH}
+                            git pull origin ${env.BRANCH_NAME}
 
                             # Activate the virtual environment
                             source venv/bin/activate
