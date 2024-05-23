@@ -31,8 +31,8 @@ pipeline {
                     echo "DEV_SERVER: ${devServer}"  // Debugging line
                     echo "GIT_BRANCH: ${gitBranch}"  // Debugging line
 
-                    DEV_SERVER = devServer
-                    GIT_BRANCH = gitBranch
+                    DEV_SERVER = $devServer
+                    GIT_BRANCH = $gitBranch
 
                     echo "env.DEV_SERVER: ${env.DEV_SERVER}"  // Debugging line
                     echo "env.GIT_BRANCH: ${env.GIT_BRANCH}"  // Debugging line
