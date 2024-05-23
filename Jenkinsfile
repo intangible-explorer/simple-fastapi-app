@@ -43,12 +43,8 @@ pipeline {
         
         stage('Deploy') {
             steps {
-                sh '''
-                echo '$env.DEV_SERVER'
-                echo '$env.GIT_BRANCH'
-                '''
-                sshagent(['ssh-app-server']) {
-                    sh '''
+                script {
+                    def deployScript = """
                         ssh -tt -o StrictHostKeyChecking=no ${env.DEV_SERVER} << EOF
                             # Kill any process running on port 8000
                             fuser -k 8000/tcp
@@ -66,7 +62,8 @@ pipeline {
                             nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
                             exit
                         EOF
-                    '''
+                    """
+                    sh deployScript
                 }
             }
         }
