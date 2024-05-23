@@ -22,8 +22,9 @@ pipeline {
                         ssh -tt -o StrictHostKeyChecking=no ubuntu@13.232.233.78 << EOF
                             cd simple-fastapi-app
                             git pull origin main
-                            source env/bin/activate
+                            source venv/bin/activate
                             nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
+                            exit
                         EOF
                     '''
                 }
