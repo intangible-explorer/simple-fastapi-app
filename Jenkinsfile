@@ -57,6 +57,7 @@ pipeline {
 
         stage('Deploy') {
             steps {
+                sh 'echo "$devServer"'
                 script {
                     def deployScript = """
                         ssh -tt -o StrictHostKeyChecking=no ${env.DEV_SERVER} << EOF
