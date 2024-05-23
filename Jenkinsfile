@@ -12,19 +12,20 @@ pipeline {
                 sh 'python3 -m venv venv'
                 sh '. venv/bin/activate'
                 sh 'venv/bin/pip install -r requirements.txt'
+                echo 'Testing Completed'
             }
         }
         stage("Deploy DEV Environment") {
             steps {
-                withCredentials([sshUserPrivateKey(credentialsId: 'app-server-ssh-private-key', keyFileVariable: 'SSH_PRIVATE_KEY', usernameVariable: 'ubuntu')]) {
+                sshagent(['ssh-app-server']) {
                     sh '''
-                    ssh -o StrictHostKeyChecking=no -i ${$SSH_PRIVATE_KEY} ubuntu@13.232.233.78 echo $SSH_PRIVATE_KEY
-                    // ssh -i $fastpi ubuntu@13.232.233.78
-                    // cd simple-fastapi-app
-                    // git pull origin main 
-                    // source env/bin/activate
-                    // fastapi dev main.py --host 0.0.0.0
-                    '''                
+                        ssh -tt -o StrictHostKeyChecking=no ubuntu@13.232.233.78 << EOF
+                            cd simple-fastapi-app
+                            git pull origin main
+                            source env/bin/activate
+                            nohup uvicorn main:app --host 0.0.0.0 --port 8000 &
+                        EOF
+                    '''
                 }
             }
         }
