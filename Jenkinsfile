@@ -21,7 +21,7 @@ pipeline {
                     sh '''
                         ssh -tt -o StrictHostKeyChecking=no ubuntu@13.232.233.78 << EOF
                             # Kill any process running on port 8000
-                            fuser -k 8000/tcp || true
+                            fuser -k 8000/tcp
                             
                             # Navigate to the app directory
                             cd simple-fastapi-app
